@@ -73,7 +73,7 @@ sub GroupsAndLanguages {
     chomp $GROUP_ROWS;
     $output =~ s/__LANGUAGES__/$LANGUAGE_ROWS/;
     $output =~ s/__GROUPS__/$GROUP_ROWS/;
-    
+
 #     print $output;
 
     return $output;
@@ -400,12 +400,7 @@ EOF
     return %t;
 }
 
-
-# GetOptions (
-#     \%OPTIONS,
-#     'help|?',
-# );
-
+__END__
 
 =head1 NAME
 
