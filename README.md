@@ -39,7 +39,11 @@ Options
 
 *   --qcode-suffix=SUFFIX
 
-    If given, all question codes in the JSON file will be prepended with I<SUFFIX>. The default value is an empty string.
+    If given, all question codes in the JSON file will be appended with I<SUFFIX>. The default value is an empty string.
+
+*   --qcode-prefix=PREFIX
+
+    If given, all question codes in the JSON file will be prepended with I<PREFIX>. The default value is an empty string.
 
 *   --group-order=ORDER
 
