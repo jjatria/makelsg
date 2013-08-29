@@ -20,6 +20,7 @@ GetOptions (
     'sid=i',
     'group-name|gname=s',
     'qcode-suffix=s',
+    'qcode-prefix=s',
     'group-order|gorder=s',
     'group-text|gtext=s',
     'start-qid=i',
@@ -32,6 +33,7 @@ if (defined $OPTIONS{lang} && $OPTIONS{lang}->[0] ne '') {
     $OPTIONS{lang} = [('en')];
 }
 $OPTIONS{'qcode-suffix'} = $OPTIONS{'qcode-suffix'} // '';
+$OPTIONS{'qcode-prefix'} = $OPTIONS{'qcode-prefix'} // '';
 $OPTIONS{'group-name'}   = $OPTIONS{'group-name'}   // 'Group';
 $OPTIONS{'group-text'}   = $OPTIONS{'group-text'}   // 'Group description';
 $OPTIONS{'group-order'}  = $OPTIONS{'group-order'}  // 0;
@@ -172,7 +174,7 @@ sub ParseJSONSurvey {
                 type         => $q->{type},
                 help         => $q->{help},
                 mandatory    => $q->{mandatory},
-                code         => $q->{code} . $OPTIONS{'qcode-suffix'},
+                code         => $OPTIONS{'qcode-prefix'} . $q->{code} . $OPTIONS{'qcode-suffix'},
             );
             $sanity_check = 0 unless CheckLanguages(\%h);
             $question_codes{$q->{code}}++;
@@ -442,7 +444,11 @@ Provide text for the group description field. The default value is "Group descri
 
 =item B<--qcode-suffix>=I<SUFFIX>
 
-If given, all question codes in the JSON file will be prepended with I<SUFFIX>. The default value is an empty string.
+If given, all question codes in the JSON file will be appended with I<SUFFIX>. The default value is an empty string.
+
+=item B<--qcode-prefix>=I<PREFIX>
+
+If given, all question codes in the JSON file will be prepended with I<PREFIX>. The default value is an empty string.
 
 =item B<--group-order>=I<ORDER>
 
