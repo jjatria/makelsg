@@ -4,6 +4,7 @@ use warnings;
 use diagnostics;
 use strict;
 use Data::Dumper;
+use Pod::Usage;
 use Getopt::Long qw(:config no_ignore_case);
 use JSON -support_by_pp;
 
@@ -25,7 +26,9 @@ GetOptions (
     'group-text|gtext=s',
     'start-qid=i',
     'help|?',
-);
+) or pod2usage(1);
+
+pod2usage(-verbose => 2) if (defined $OPTIONS{help});
 
 if (defined $OPTIONS{lang} && $OPTIONS{lang}->[0] ne '') {
     @{$OPTIONS{lang}} = split(/,/, (join ',', @{$OPTIONS{lang}}));
@@ -160,7 +163,7 @@ sub ParseJSONSurvey {
     my %question_codes;
     eval {
         my $fh;
-        open $fh, $filename
+        open ($fh, '<', $filename)
             or die "Could not open $fh: $!";
         my $content = do { local $/;  <$fh> };
         my $json = new JSON->decode($content);
@@ -467,35 +470,35 @@ The script takes as input the structure of a question group in JSON syntax. The 
 Below is an example of the structure expected to be found in the input file:
 
     {
-        "questions":[
-            {
-                "code":"TestQuestion",
-                "type":"O",
-                "question":{
-                    "en":"What does GPL stand for?\nI can use newlines as well.",
-                    "es":"¿Qué significa GPL?"
-                },
-                "help":{
-                    "en":"Some help text in English, accepting <span>HTML</span>",
-                    "es":"Texto de ayuda en castellano, que soporta <span>HTML</span>"
-                },
-                "relevance":"1",
-                "mandatory":"Y",
-                "random_group":"",
-                "answers":{
-                    "en":[
-                        ["General Public License",1],
-                        ["Greater Performance Law",0],
-                        ["Gone Past Land",0]
-                    ],
-                    "es":[
-                        ["Gone Past Land",0],
-                        ["General Public License",1],
-                        ["Grande Pero Lento",0]
-                    ]
-                }
-            }
-        ]
+      "questions":[
+        {
+          "code":"TestQuestion",
+          "type":"O",
+          "question":{
+            "en":"What does GPL stand for?\nI can use newlines as well.",
+            "es":"Que significa GPL?"
+          },
+          "help":{
+            "en":"Some help text in English, accepting <span>HTML</span>",
+            "es":"Texto de ayuda en castellano, que soporta <span>HTML</span>"
+          },
+          "relevance":"1",
+          "mandatory":"Y",
+          "random_group":"",
+          "answers":{
+            "en":[
+              ["General Public License",1],
+              ["Greater Performance Law",0],
+              ["Giant Panda Land",0]
+            ],
+            "es":[
+              ["Giant Panda Land",0],
+              ["General Public License",1],
+              ["Grande Pero Lento",0]
+            ]
+          }
+        }
+      ]
     }
 
 The field I<type> holds the code for the question type, which is single-character internal code used by LimeSurvey to differentiate the different types of question. This script has been designed and tested for generating questions of type I<L> ("List Drop-Down/Radio-Button List") and I<O> ("List With Comment Drop-Down/Radio-Button List"). Other questions might also work, but no guarrantee is given for other types so far.
